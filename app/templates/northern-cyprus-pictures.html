@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container-fluid custom-container">
+
+    <div class="col d-flex flex-column align-items-center flex-shrink-0 index justify-content-center" id="indexGroup">
+        <h1 class="mx-4">Gallery</h1>
+        <div>
+		{% for image in data['img'] %}
+		<img class="d-block w-100 p-4" src="/{{ data['path'] }}/{{ image }}">
+		{% endfor %}
+        </div>
+	<div class="pb-4">
+		<a href="/northern-cyprus/anal/{{ data['object_id'] }}" class="btn btn-success" style="margin-top: 1rem;">Analytics</a>
+		<button onclick="history.back()" class="btn btn-success" style="margin-top: 1rem;">Go Back</button>
+	</div>
+    </div>
+</div>
+
+{% endblock content %}

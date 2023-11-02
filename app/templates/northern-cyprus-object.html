@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid custom-container">
+
+    <div class="col d-flex flex-column align-items-center flex-shrink-0 index justify-content-center" id="indexGroup">
+        <h1 class="mx-4">Analytics</h1>
+        <div class="col-md-4">
+          <div class="card mb-4">
+              <div class="card-body">
+                <p class="card-text"></p>
+                <div class="list-group">
+                  <p><strong>Complex name: </strong>{{ data['object']['Complex Name'] }}</p>
+                  <p><strong>Object: </strong>{{ data['object']['Object'] }}</p>
+                  <p><strong>Type: </strong>{{ data['object']['Apartment type'] }}</p>
+                  <p><strong>Size: </strong>{{ data['object']['SQ/M'] }}</p>
+                  <p><strong>Location: </strong>{{ data['object']['Town'] }}</p>
+                  <p><strong>Price: </strong>{{ data['object']['Start price'] }}</p>
+                  <p><strong>Price & Tax: </strong>{{ data['object']['Start Price and Tax'] }}</p>
+                  <p><strong>Price for property title: </strong>{{ data['object']['Price for Property Title Deed'] }}</p>
+                  <p><strong>PPI (median): </strong>{{ data['object']['PPI_Median'] }}</p>
+                  <p><strong>PRY: </strong>{{ data['object']['PRY_sh'] }}</p>
+                  <p><strong>TTFI: </strong>{{ data['object']['TTFI'] }}</p>
+                  <p><strong>DCR: </strong>{{ data['object']['DCR_m'] }}</p>
+                  <p><strong>OTVCR: </strong>{{ data['object']['OTVCR'] }}</p>
+                  <p><strong>ROI (median): </strong>{{ data['object']['Median_ROI'] }}</p>
+                  <p><strong>ROI (combined): </strong>{{ data['object']['Combined_ROI'] }}</p>
+                  <p><strong>IRRS: </strong>{{ data['object']['Main_IRRS'] }}</p>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="list-group">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                          <p class="card-text"></p>
+			                    <canvas id="chartCapForecast"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card mb-4" style="min-width: 200px; min-height: 100px;">
+                      <div class="card-body">
+                        <p class="card-text"></p>
+                        <canvas id="chartPPI"></canvas>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card mb-4" style="min-width: 200px; min-height: 100px;">
+                      <div class="card-body">
+                        <p class="card-text"></p>
+                        <canvas id="chartIrrs"></canvas>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card mb-4" style="min-width: 200px; min-height: 100px;">
+                      <div class="card-body">
+                        <p class="card-text"></p>
+                        <canvas id="chartRoi"></canvas>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+	<div class="pb-4">
+		<button onclick="history.back()" class="btn btn-success" style="margin-top: 1rem;">Go Back</button>
+	</div>
+    </div>
+</div>
+
+
+<script>
+  var ctx = document.getElementById("chartCapForecast");
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025', '2026', '2027', '2028', '2029'],
+      datasets: [{
+        label: 'Capitalization Forecast',
+        data: [
+          {{ data['object']['Capit_forec_2024'] }},
+          {{ data['object']['Capit_forec_2025'] }},
+          {{ data['object']['Capit_forec_2026'] }},
+          {{ data['object']['Capit_forec_2027'] }},
+          {{ data['object']['Capit_forec_2028'] }},
+          {{ data['object']['Capit_forec_2029'] }},
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  var ctx = document.getElementById("chartPPI");
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025', '2026', '2027', '2028', '2029'],
+      datasets: [{
+        label: 'PPI',
+        data: [
+          {{ data['object']['PPI_St_2024']|replace('%', '') }},
+          {{ data['object']['PPI_St_2025']|replace('%', '') }},
+          {{ data['object']['PPI_St_2026']|replace('%', '') }},
+          {{ data['object']['PPI_St_2027']|replace('%', '') }},
+          {{ data['object']['PPI_St_2028']|replace('%', '') }},
+          {{ data['object']['PPI_St_2029']|replace('%', '') }},
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  var ctx = document.getElementById("chartIrrs");
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025', '2026', '2027', '2028', '2029'],
+      datasets: [{
+        label: 'IRRS',
+        data: [
+          {{ data['object']['IRRS_2024'] }},
+          {{ data['object']['IRRS_2025'] }},
+          {{ data['object']['IRRS_2026'] }},
+          {{ data['object']['IRRS_2027'] }},
+          {{ data['object']['IRRS_2028'] }},
+          {{ data['object']['IRRS_2029'] }},
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+</script>
+
+<script>
+  var ctx = document.getElementById("chartRoi");
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025', '2026', '2027', '2028', '2029'],
+      datasets: [{
+        label: 'ROI',
+        data: [
+          {{ data['object']['Combined_ROI_2024'] }},
+          {{ data['object']['Combined_ROI_2025'] }},
+          {{ data['object']['Combined_ROI_2026'] }},
+          {{ data['object']['Combined_ROI_2027'] }},
+          {{ data['object']['Combined_ROI_2028'] }},
+          {{ data['object']['Combined_ROI_2029'] }},
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock content %}

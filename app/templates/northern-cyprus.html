@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container-fluid custom-container">
+
+    <div class="col d-flex flex-column align-items-center flex-shrink-0 index justify-content-center" id="indexGroup">
+        <h1 class="mx-4">Northern Cyprus Dataset</h1>
+        <div class="list-group">
+            <div class="row">
+                {% for item in data['prop'] %}
+                <div class="col-md-4">
+                    <div class="card mb-4">
+			    {% set img_path = 'static/northern-cyprus/images/' + item['ID']|string %}
+			    {% if img_path in data['img'] %}
+				<img src="/static/northern-cyprus/images/{{ item['ID'] }}/{{ data['img'][img_path][0] }}" class="card-img-top">
+			    {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">{{ item['Complex Name'] }}</h5>
+                            <p class="card-text"><strong>Object:</strong> {{ item['Object'] }}</p>
+                            <p class="card-text"><strong>Apartment Type:</strong> {{ item['Apartment type'] }}</p>
+                            <p class="card-text"><strong>Size:</strong> {{ item['SQ/M'] }} m&sup2;</p>
+                            <p class="card-text"><strong>Location:</strong> {{ item['Regions'] }} / {{ item['Town'] }}</p>
+                            <p class="card-text"><strong>Start Price:</strong> &pound;{{ item['Start price'] }}</p>
+                            <p class="card-text"><strong>Start Price + Tax:</strong> &pound;{{ item['Start Price and Tax'] }}</p>
+                            <p class="card-text"><strong>ROI:</strong> {{ item['Combined_ROI'] }}</p>
+                            <p class="card-text"><strong>IRRS:</strong> {{ item['Main_IRRS'] }}</p>
+			    <div>
+				    <canvas id="chart-{{ item['ID']  }}"></canvas>
+			    </div>
+			    <a href="/northern-cyprus/anal/{{ item['ID'] }}" class="btn btn-success" style="margin-top: 1rem;">Analytics</a>
+			    <a href="/northern-cyprus/pics/{{ item['ID'] }}" class="btn btn-success" style="margin-top: 1rem;">Pictures</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% for item in data['prop'] %}
+<script>
+  var ctx = document.getElementById("chart-{{ item['ID'] }}");
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2024', '2025', '2026', '2027', '2028', '2029'],
+      datasets: [{
+        label: 'Capitalization Forecast',
+        data: [{{ item['Capit_forec_2024'] }}, {{ item['Capit_forec_2025'] }}, {{ item['Capit_forec_2026'] }}, {{ item['Capit_forec_2027'] }}, {{ item['Capit_forec_2028'] }}, {{ item['Capit_forec_2029'] }}],
+    borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: false
+        }
+      }
+    }
+  });
+</script>
+{% endfor %}
+
+{% endblock content %}
